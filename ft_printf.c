@@ -195,26 +195,71 @@ char	get_specifier(const char* str, int start)
 	return(specifier);
 }
 
+char*	get_result(const char* format, char* str)
+{
+	int		i;
+	char*	copy;
+	char*	result;
+
+	i = 0;
+	result = malloc(ft_strlen(format) + ft_strlen(str) + 1);
+	copy = (char*)format;
+	while(format[i])
+	{
+		result[i] = format[i];
+		if(format[i] == '%')
+		{
+			result[i] = '\0';
+			result = ft_strjoin(result, str);
+			result = ft_strjoin(result, format + i + 2);
+			break;
+		}
+		i++;
+	}
+	return(result);
+}
+void print_result(const char* result)
+{
+	int	i;
+
+	i = 0;
+	while(result[i])
+	{
+		write(1, &result[i], 1);
+		i++;
+	}
+}
+
 void simple_printf(const char* format, ...)
 {
 	va_list args;
 	int		i;
 	int		count;
 	char	f_specifier;
+	char	*result;
 	
 	i = 0;
+	result = (char*)format;
 	count = count_args(format);
 	va_start(args, format);
 	while(i < count)
 	{
 		f_specifier = get_specifier(format, i);
-		printf("%c\n", f_specifier);
+		if(f_specifier == 's')
+		{
+			result = get_result(result, va_arg(args, char*));
+		}
 		i++;
 	}
+	print_result(result);
+	free(result);
 	va_end(args);
 }
 
 int main()
 {
-	simple_printf("String: %s, Integer: %i, String: %s ", 2, 1, 5);
+	simple_printf("String: %s", "Goodbye");
+	// char *str = "Hello, world!";
+	// str = str + 7;
+	// printf("%s\n", str);
 }
