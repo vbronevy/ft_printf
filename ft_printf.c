@@ -158,10 +158,10 @@ int main()
 {
 	simple_printf("String: %s, my friends %s", "25", "12");
 
-	// printf("Test Case 1: Simple Integer\n");
-    // simple_printf("The number is: %i\n", 42);
-	// printf("\nTest Case 2: Simple String\n");
-    // simple_printf("Hello, %s!\n", "world");
-	// printf("\nTest Case 3: Multiple Integers\n");
-    // simple_printf("Numbers: %i, %i, and %i\n", 1, 2, 3);
+	printf("Test Case 1: Simple Integer\n");
+    simple_printf("The number is: %i\n", 42);
+	printf("\nTest Case 2: Simple String\n");
+    simple_printf("Hello, %s!\n", "world");
+	printf("\nTest Case 3: Multiple Integers\n");
+    simple_printf("Numbers: %i, %i, and %i\n", 1, 2, 3);
 }
