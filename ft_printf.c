@@ -131,8 +131,10 @@ void simple_printf(const char* format, ...)
 	int		count;
 	char	f_specifier;
 	char	*result;
+	char 	holder[200];
 	
 	i = 0;
+	strcpy(holder, format);
 	result = (char*)format;
 	count = count_args(format);
 	va_start(args, format);
@@ -141,22 +143,25 @@ void simple_printf(const char* format, ...)
 		f_specifier = get_specifier(format, i);
 		if (f_specifier == 's')
 		{
-			result = put_string(result, va_arg(args, char*));
+			result = put_string(holder, va_arg(args, char*));
 		}
 		else if(f_specifier == 'i')
 		{
-			result = put_number(result, va_arg(args, int));
+			result = put_number(holder, va_arg(args, int));
 		}
+		strcpy(holder, result);
+		free(result);
+		result = NULL;
 		i++;
 	}
-	print_result(result);
-	free(result);
+	print_result(holder);
+	// free(holder);
 	va_end(args);
 }
 
 int main()
 {
-	simple_printf("String: %s, my friends %s", "25", "12");
+	simple_printf("String: %s, my friends %s", "25", "dfa");
 
 	printf("Test Case 1: Simple Integer\n");
     simple_printf("The number is: %i\n", 42);
