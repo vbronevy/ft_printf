@@ -126,12 +126,3 @@ void	print_result(const char *result)
 		i++;
 	}
 }
-
-void	f_strcat(char *str1, char *str2)
-{
-	int	i;
-	
-
-	i = 0;
-
-}
