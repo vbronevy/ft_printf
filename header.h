@@ -24,5 +24,6 @@ char	*put_string(const char *format, char *str);
 char	*put_number(const char *format, int num);
 void	print_result(const char *result);
 void	simple_printf(const char *format, ...);
+char	*get_result(char *result, char *holder, char specifier, va_list args);
 
 #endif
