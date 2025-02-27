@@ -39,6 +39,7 @@ void	simple_printf(const char *format, ...)
 		result = NULL;
 		free(result);
 		i++;
+		printf("%c\n", f_specifier);
 	}
 	if (count == 0)
 		print_result(format);
@@ -47,40 +48,41 @@ void	simple_printf(const char *format, ...)
 		print_result(holder);
 		free(holder);
 	}
+	printf("%i", count);
 	va_end(args);
 }
 
-// int main()
-// {
-// 	simple_printf("String: %c, my friends %c, bye\n", 'w', '7');
+int main()
+{
+	simple_printf("String: %i, my friends %%, bye\n", 4 , 1);
 
-//     // printf("\nTest Case 1: Simple Integer\n");
-//     // simple_printf("The number is: %i\n", 42);
+    // printf("\nTest Case 1: Simple Integer\n");
+    // simple_printf("The number is: %i\n", 42);
 
-//     // printf("\nTest Case 2: Simple String\n");
-//     // simple_printf("Hello, %s!\n", "world");
+    // printf("\nTest Case 2: Simple String\n");
+    // simple_printf("Hello, %s!\n", "world");
 
-//     // printf("\nTest Case 3: Multiple Integers\n");
-//     // simple_printf("Numbers: %i, %i, and %i\n", 1, 2, 3);
+    // printf("\nTest Case 3: Multiple Integers\n");
+    // simple_printf("Numbers: %i, %i, and %i\n", 1, 2, 3);
 
-//     // printf("\nTest Case 4: Multiple Strings\n");
-//     // simple_printf("%s %s %s\n", "This", "is", "a test");
+    // printf("\nTest Case 4: Multiple Strings\n");
+    // simple_printf("%s %s %s\n", "This", "is", "a test");
 
-//     // printf("\nTest Case 5: Mixed Strings and Integers\n");
-//     // simple_printf("%s has %i apples and %i oranges.\n", "Alice", 5, 3);
+    // printf("\nTest Case 5: Mixed Strings and Integers\n");
+    // simple_printf("%s has %i apples and %i oranges.\n", "Alice", 5, 3);
 
-//     // printf("\nTest Case 6: Empty String\n");
-//     // simple_printf("This is an empty string: '%s'\n", "");
+    // printf("\nTest Case 6: Empty String\n");
+    // simple_printf("This is an empty string: '%s'\n", "");
 
-//     // printf("\nTest Case 7: Edge Case - Integer Limits\n");
-//     // simple_printf("Min: %i, Max: %i\n", -2147483648, 2147483647);
+    // printf("\nTest Case 7: Edge Case - Integer Limits\n");
+    // simple_printf("Min: %i, Max: %i\n", -2147483648, 2147483647);
 
-//     // printf("\nTest Case 8: Edge Case - Large String\n");
-//     // simple_printf("%s\n", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+    // printf("\nTest Case 8: Edge Case - Large String\n");
+    // simple_printf("%s\n", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
 
-//     // printf("\nTest Case 9: No Specifiers\n");
-//     // simple_printf("This is a test with no specifiers.\n");
+    // printf("\nTest Case 9: No Specifiers\n");
+    // simple_printf("This is a test with no specifiers.\n");
 
-//     // printf("\nTest Case 10: Consecutive Specifiers\n");
-//     // simple_printf("%i%i%i%i\n", 1, 2, 3, 4);
-// }
+    // printf("\nTest Case 10: Consecutive Specifiers\n");
+    // simple_printf("%i%i%i%i\n", 1, 2, 3, 4);
+}

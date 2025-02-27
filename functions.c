@@ -31,7 +31,7 @@ int	count_args(const char *str)
 			i = i + 2;
 			continue ;
 		}
-		if (str[i] == '%' && str[i + 1] != '%')
+		else if (str[i] == '%' && str[i + 1] != '%')
 			sum++;
 		i++;
 	}
@@ -59,8 +59,12 @@ char	get_specifier(const char *str, int start)
 			}
 			if (str[i + 1] == 'i')
 				specifier = 'i';
-			if (str[i + 1] == 'c')
+			else if (str[i + 1] == 'c')
 				specifier = 'c';
+			else if (str[i + 1] == '%')
+				specifier = '%';
+			// else
+			// 	break;
 			break ;
 		}
 		i++;
@@ -124,7 +128,6 @@ char	*put_number(const char *format, int num)
 char	*put_char(const char *format, int c)
 {
 	int		i;
-	char	*copy;
 	char	*result;
 	char	*start;
 
@@ -132,12 +135,33 @@ char	*put_char(const char *format, int c)
 	i = 0;
 	while (format[i + 1] != '\0')
 	{
-		if (format[i] == '%')
+		if (format[i] == '%' && format[i + 1] != '%')
 		{
 			start = ft_substr(format, 0, i + 1);
 			start[i] = (char)c;
 			result = ft_strjoin(start, format + i + 2);
-			free(copy);
+			free(start);
+			break ;
+		}
+		i++;
+	}
+	return (result);
+}
+char	*put_pt_sn(const char *format)
+{
+	int		i;
+	char	*result;
+	char	*start;
+
+	result = NULL;
+	i = 0;
+	while (format[i + 1] != '\0')
+	{
+		if (format[i] == '%' && format[i + 1] == '%')
+		{
+			start = ft_substr(format, 0, i + 1);
+			start[i] = '%';
+			result = ft_strjoin(start, format + i + 2);
 			free(start);
 			break ;
 		}
@@ -166,5 +190,7 @@ char	*get_result(char *result, char *holder, char specifier, va_list args)
 		result = put_number(holder, va_arg(args, int));
 	else if (specifier == 'c')
 		result = put_char(holder, va_arg(args, int));
+	else if (specifier == '%')
+		result = put_pt_sn(holder);
 	return (result);
 }
