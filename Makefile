@@ -1,32 +1,22 @@
-# ************************************************************************** #
-#                                                                            #
-#                                                        :::      ::::::::   #
-#   Makefile                                           :+:      :+:    :+:   #
-#                                                    +:+ +:+         +:+     #
-#   By: vbronevy <vbronevy@student.42.fr>          #+#  +:+       +#+        #
-#                                                +#+#+#+#+#+   +#+           #
-#   Created: 2025-01-28 17:39:26 by vbronevy          #+#    #+#             #
-#   Updated: 2025-01-28 17:39:26 by vbronevy         ###   ########.fr       #
-#                                                                            #
-# ************************************************************************** #
 
-CC = cc
+NAME    = libftprintf.a
+CC      = gcc
+CFLAGS  = -Wall -Wextra -Werror
 
-CFLAGS = -Werror -Wextra -Wall
-
-NAME = libftprintf.a
-
-SRCS = ft_printf.c functions.c
-
-OBJS = $(SRCS:.c=.o)
+SRCS    = ft_printf.c ft_printf_helper.c
+OBJS    = ft_printf.o ft_printf_helper.o
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
 	ar rcs $(NAME) $(OBJS)
+	ranlib $(NAME)
 
-.o:.c
-	$(CC) $(CFLAGS) -c $< -o $@
+ft_printf.o: ft_printf.c ft_printf.h
+	$(CC) $(CFLAGS) -c ft_printf.c -o ft_printf.o
+
+ft_printf_helper.o: ft_printf_helper.c ft_printf.h
+	$(CC) $(CFLAGS) -c ft_printf_helper.c -o ft_printf_helper.o
 
 clean:
 	rm -f $(OBJS)

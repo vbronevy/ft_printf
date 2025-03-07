@@ -1,88 +1,97 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vbronevy <vbronevy@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/28 16:03:51 by vbronevy          #+#    #+#             */
-/*   Updated: 2025/02/05 01:50:33 by vbronevy         ###   ########.fr       */
-/*                                                                            */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   ft_printf.c										:+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: vbronevy <vbronevy@student.42.fr>		  +#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2025/03/05 16:19:33 by vbronevy		  #+#	#+#			 */
+/*   Updated: 2025/03/07 13:58:35 by vbronevy		 ###   ########.fr	   */
+/*																			*/
 /* ************************************************************************** */
 
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
-#include "libft/libft.h"
-#include "header.h"
+#include "ft_printf.h"
 
-void	simple_printf(const char *format, ...)
+int	put_str(char *str)
+{
+	int	count;
+
+	count = 0;
+	if (!str)
+	{
+		write(1, "(null)", 6);
+		return (6);
+	}
+	while (*str)
+	{
+		write(1, str, 1);
+		str++;
+		count++;
+	}
+	return (count);
+}
+
+int	put_char(int c)
+{
+	write(1, &c, 1);
+	return (1);
+}
+
+static int	put_format(va_list args, char c)
+{
+	if (c == 's')
+		return (put_str(va_arg(args, char *)));
+	else if (c == 'c')
+		return (put_char(va_arg(args, int)));
+	else if (c == 'd' || c == 'i')
+		return (put_nbr(va_arg(args, int)));
+	else if (c == 'u')
+		return (put_unbr(va_arg(args, unsigned int)));
+	else if (c == 'x')
+		return (put_hexidec_low(va_arg(args, unsigned int)));
+	else if (c == 'X')
+		return (put_hexidec_up(va_arg(args, unsigned int)));
+	else if (c == '%')
+		return (put_char('%'));
+	else if (c == 'p')
+		return ((put_ptr((unsigned long)va_arg(args, void *))));
+	else
+		return (-1);
+}
+
+static int	handle_char(const char *f, va_list a, int *i)
+{
+	int	printed;
+
+	if (f[*i] == '%' && f[*i + 1])
+	{
+		(*i)++;
+		printed = put_format(a, f[*i]);
+		if (printed != -1)
+		{
+			(*i)++;
+			return (printed);
+		}
+	}
+	write(1, &f[*i], 1);
+	(*i)++;
+	return (1);
+}
+
+int	ft_printf(const char *format, ...)
 {
 	va_list	args;
 	int		i;
-	int		count;
-	char	f_specifier;
-	char	*result;
-	char	*holder;
+	int		total;
 
-	i = 0;
-	holder = (char *)format;
-	count = count_args(format);
 	va_start(args, format);
-	while (i < count)
-	{
-		f_specifier = get_specifier(format, i);
-		result = get_result(result, holder, f_specifier, args);
-		if (i > 0 && i - 1 < count)
-			free(holder);
-		holder = result;
-		result = NULL;
-		free(result);
-		i++;
-		printf("%c\n", f_specifier);
-	}
-	if (count == 0)
-		print_result(format);
-	else
-	{
-		print_result(holder);
-		free(holder);
-	}
-	printf("%i", count);
+	i = 0;
+	total = 0;
+	while (format && format[i])
+		total += handle_char(format, args, &i);
 	va_end(args);
-}
-
-int main()
-{
-	simple_printf("String: %i, my friends %%, bye\n", 4 , 1);
-
-    // printf("\nTest Case 1: Simple Integer\n");
-    // simple_printf("The number is: %i\n", 42);
-
-    // printf("\nTest Case 2: Simple String\n");
-    // simple_printf("Hello, %s!\n", "world");
-
-    // printf("\nTest Case 3: Multiple Integers\n");
-    // simple_printf("Numbers: %i, %i, and %i\n", 1, 2, 3);
-
-    // printf("\nTest Case 4: Multiple Strings\n");
-    // simple_printf("%s %s %s\n", "This", "is", "a test");
-
-    // printf("\nTest Case 5: Mixed Strings and Integers\n");
-    // simple_printf("%s has %i apples and %i oranges.\n", "Alice", 5, 3);
-
-    // printf("\nTest Case 6: Empty String\n");
-    // simple_printf("This is an empty string: '%s'\n", "");
-
-    // printf("\nTest Case 7: Edge Case - Integer Limits\n");
-    // simple_printf("Min: %i, Max: %i\n", -2147483648, 2147483647);
-
-    // printf("\nTest Case 8: Edge Case - Large String\n");
-    // simple_printf("%s\n", "Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
-
-    // printf("\nTest Case 9: No Specifiers\n");
-    // simple_printf("This is a test with no specifiers.\n");
-
-    // printf("\nTest Case 10: Consecutive Specifiers\n");
-    // simple_printf("%i%i%i%i\n", 1, 2, 3, 4);
+	return (total);
 }
